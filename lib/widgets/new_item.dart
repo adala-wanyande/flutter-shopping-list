@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:shopping_list_app/data/categories.dart';
 import 'package:shopping_list_app/models/category.dart';
 import 'package:shopping_list_app/models/grocery_item.dart';
@@ -7,7 +8,7 @@ class NewItem extends StatefulWidget {
   const NewItem({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  State<NewItem> createState() {
     return _NewItemState();
   }
 }
@@ -23,10 +24,11 @@ class _NewItemState extends State<NewItem> {
       _formKey.currentState!.save();
       Navigator.of(context).pop(
         GroceryItem(
-            id: DateTime.now().toString(),
-            name: _enteredName,
-            quantity: _enteredQuantity,
-            category: _selectedCategory),
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        ),
       );
     }
   }
@@ -58,9 +60,12 @@ class _NewItemState extends State<NewItem> {
                   return null;
                 },
                 onSaved: (value) {
+                  // if (value == null) {
+                  //   return;
+                  // }
                   _enteredName = value!;
                 },
-              ),
+              ), // instead of TextField()
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -88,6 +93,7 @@ class _NewItemState extends State<NewItem> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: DropdownButtonFormField(
+                      value: _selectedCategory,
                       items: [
                         for (final category in categories.entries)
                           DropdownMenuItem(
@@ -103,7 +109,7 @@ class _NewItemState extends State<NewItem> {
                                 Text(category.value.title),
                               ],
                             ),
-                          )
+                          ),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -114,6 +120,7 @@ class _NewItemState extends State<NewItem> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -126,9 +133,9 @@ class _NewItemState extends State<NewItem> {
                   ElevatedButton(
                     onPressed: _saveItem,
                     child: const Text('Add Item'),
-                  ),
+                  )
                 ],
-              ) // instead of TextField()
+              ),
             ],
           ),
         ),
